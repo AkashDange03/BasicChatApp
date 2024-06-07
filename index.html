@@ -73,28 +73,34 @@
     <!-- connection to host that serves the page -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
+        //creating instace of io
         const socket = io();
 
+        //accessing data using dom
         const form = document.getElementById("form");
         const input = document.getElementById("input");
         const message = document.getElementById("messages");
         const room = document.getElementById("room");
 
-
+        //handling form submit event 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            //sending data to server
             if (input.value) {
                 socket.emit('chat message', {data:input.value,room:room.value});
                 input.value = '';
             }
         })
 
-
+        //listening to connect event
         socket.on('connect',()=>{
             const heading = document.getElementById('title');
             heading.innerHTML = socket.id;
         })
 
+        //listening to event triggered from server
         socket.on('chat message',(msg)=>{
             const item = document.createElement('li');
             item.textContent = msg;

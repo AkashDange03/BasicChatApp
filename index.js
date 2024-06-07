@@ -15,21 +15,31 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 console.log("absolute root path" + __dirname)
 
 //handling routing 
-app.get("/",(req,res)=>{
-    res.sendFile(join(__dirname,'index.html'))
+app.get("/", (req, res) => {
+    res.sendFile(join(__dirname, 'index.html'))
 })
 
-io.on('connection',(socket)=>{
+//io refers to  a circuit where multiple sockets are connected
+
+io.on('connection', (socket) => {
+
+    //acessing id
     console.log(" user connected " + socket.id);
-    socket.on('chat message',({data,room})=>{
-    io.to([room,socket.id]).emit('chat message',data); 
+
+    //listening to triggered event
+    socket.on('chat message', ({ data, room }) => {
+
+        //sending a data to room id user and emmited user
+        io.to([room, socket.id]).emit('chat message', data);
     })
-    socket.on('disconnect',()=>{
+
+    //listening to disconnect event
+    socket.on('disconnect', () => {
         console.log("a user disconnected");
     })
 })
 
 //running server on port 3000
-server.listen(3000,()=>{
+server.listen(3000, () => {
     console.log("Server running on port: 3000");
 })
